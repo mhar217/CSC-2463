@@ -12,14 +12,25 @@ let sounds = new Tone.Players({
   blackChange : "soundAssets/abstract.wav"
 }).toDestination();
 
-player.loop = true;
+sounds.loop = true;
+
+let port;
+let joyX = 0, joyY = 0, sw = 0;
+let connectButton;
+let circleX, circleY;
+let speed = 2;
 
 function setup() {
-    createCanvas(550, 455);
-    background(220);
+  createCanvas(550, 455);
+  background(220);
+  port = createSerial();
+  circleX = width / 2;
+  circleY = height / 2;
+  connectButton = createButton("Connect");
+  connectButton.mousePressed(connect);
   }
   
-  function draw() {
+function draw() {
     fill('red')
     rect(0,0,40,40)
     fill('orange')
@@ -40,49 +51,70 @@ function setup() {
     rect(0,320,40,40)
     fill('black')
     rect(0,360,40,40)
-    
-  }
-  function mouseDragged() {
-    strokeWeight(10)
-    if (mouseX >= 40) {
-      line(mouseX, mouseY, pmouseX, pmouseY)
-      noFill()
+    noFill();
+    let str = port.readUntil("\n");
+    let values = str.split(",");
+    if (values.length > 2) {
+    joyX = values[0];
+    joyY = values[1];
+    sw = Number(values[2]);
+    if (joyX > 0) {
+      circleX += speed;
+    } else if (joyX < 0) {
+      circleX -= speed;
+    }
+
+    if (joyY > 0) {
+      circleY += speed;
+    } else if (joyY < 0) {
+      circleY -= speed;
     }
   }
-  function mousePressed() {
-    sounds.player('melody').start();
-    if (mouseX > 0 - 40 && mouseX < 0 + 40 && mouseY > 0 - 40 && mouseY < 0 + 40) {
+  if (sw == 1) {
+    fill('red');
+  }
+  else {
+    fill(255);
+  }
+   circle(circleX, circleY, 20);
+  }
+function SW () {
+  if (circleX > 0 - 40 && circleX < 0 + 40 && circleY > 0 - 40 && circleY < 0 + 40 && sw == 1) {
       stroke('red')
       sounds.player('redChange').start();
-    } else if (mouseX > 0 - 40 && mouseX < 0 + 40 && mouseY > 40 - 40 && mouseY < 40 + 40) {
+    } else if (circleX > 0 - 40 && circleX < 0 + 40 && circleY > 40 - 40 && circleY < 40 + 40 && sw == 1) {
       stroke('orange')
       sounds.player('orangeChange').start();
-    } else if (mouseX > 0 - 40 && mouseX < 0 + 40 && mouseY > 80 - 40 && mouseY < 80 + 40) {
+    } else if (circleX > 0 - 40 && circleX < 0 + 40 && circleY > 80 - 40 && circleY < 80 + 40 && sw == 1) {
       stroke('yellow')
       sounds.player('yellowChange').start();
-    } else if (mouseX > 0 - 40 && mouseX < 0 + 40 && mouseY > 120 - 40 && mouseY < 120 + 40) {
+    } else if (circleX > 0 - 40 && circleX < 0 + 40 && circleY > 120 - 40 && circleY < 120 + 40 && sw == 1) {
       stroke('green')
       sounds.player('greenChange').start();
-    } else if (mouseX > 0 - 40 && mouseX < 0 + 40 && mouseY > 160 - 40 && mouseY < 160 + 40) {
+    } else if (circleX > 0 - 40 && circleX < 0 + 40 && circleY > 160 - 40 && circleY < 160 + 40 && sw == 1) {
       stroke('cyan')
       sounds.player('cyanChange').start();
-    } else if (mouseX > 0 - 40 && mouseX < 0 + 40 && mouseY > 200 - 40 && mouseY < 200 + 40) {
+    } else if (circleX > 0 - 40 && circleX < 0 + 40 && circleY > 200 - 40 && circleY < 200 + 40 && sw == 1) {
       stroke('blue')
       sounds.player('blueChange').start();
-    } else if (mouseX > 0 - 40 && mouseX < 0 + 40 && mouseY > 240 - 40 && mouseY < 240 + 40) {
+    } else if (circleX > 0 - 40 && circleX < 0 + 40 && circleY > 240 - 40 && circleY < 240 + 40 && sw == 1) {
       stroke('purple')
       sounds.player('purpleChange').start();
-    } else if (mouseX > 0 - 40 && mouseX < 0 + 40 && mouseY > 280 - 40 && mouseY < 280 + 40) {
+    } else if (circleX > 0 - 40 && circleX < 0 + 40 && circleY > 280 - 40 && circleY < 280 + 40 && sw == 1) {
       stroke('brown')
       sounds.player('brownChange').start();
-    } else if (mouseX > 0 - 40 && mouseX < 0 + 40 && mouseY > 320 - 40 && mouseY < 320 + 40) {
+    } else if (circleX > 0 - 40 && circleX < 0 + 40 && circleY > 320 - 40 && circleY < 320 + 40 && sw == 1) {
       stroke('white')
       sounds.player('whiteChange').start();
-    } else if (mouseX > 0 - 40 && mouseX < 0 + 40 && mouseY > 360 - 40 && mouseY < 360 + 40) {
+    } else if (circleX > 0 - 40 && circleX < 0 + 40 && circleY > 360 - 40 && circleY < 360 + 40 && sw == 1) {
       stroke('black')
       sounds.player('blackChange').start();
     }
-  }
-    function mouseReleased() {
-    sounds.player('melody').stop();
+}
+  function connect () {
+    if (!port.opened()) {
+      port.open('Arduino', 9600);
+    } else {
+      port.close();
+    }
   }
