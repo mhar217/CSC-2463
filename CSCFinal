@@ -1,0 +1,27 @@
+CSC 2463 Final 
+Video Demonstration: https://youtube.com/shorts/jwMVitl790Q
+Project Title: Jackpotter
+Webpage: https://mhar217.github.io/CSC-2463/Jackpot/
+
+Description:
+"Jackpotter" is a concentration game similar to the arcade game Cyclone where players keep track of multiple lights flashing in a pattern, 
+attempting to stop the pattern on a certain color of light. As players continue with the game, 
+the pattern will change, and the game ends when the player’s jackpot streak is broken. 
+The game increases in difficulty as the player continuously succeeds in landing on the correct color, 
+increasing the speed at which the lights flash. Players will press a button an appropriate distance away 
+from other implements and the streak score will be shown on the screen, increasing with each success. 
+
+PROJECT ELEMENTS:
+
+- GRAPHICS	
+Text displaying current streak score 
+
+- SOUND	
+Synth SFXs for successful/unsuccessful button press
+Curated background music
+
+- HARDWARE INPUT	
+Button (attempt jackpot)
+
+- HARDWARE OUTPUT	
+6 LEDs (5 LEDs with same color to symbolize incorrect jackpot, 1 green to symbolize correct jackpot)
